@@ -27,5 +27,5 @@ Gan | Encoder | Discriminator
 
 ## Usage
 ```
-train_model.py --prior_type gaussian_mixture
+python train_model.py --prior_type gaussian_mixture
 ```

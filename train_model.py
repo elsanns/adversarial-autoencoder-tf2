@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('--n_epochs', type=int, default=20, help='Number of epochs')
     parser.add_argument('--learning_rate', type=float, default=0.001, help='Learning rate')
     parser.add_argument('--batch_size', type=int, default=128, help='Batch size')
-    parser.add_argument('--num_classes', type=int, default=10, help='Number of classes (for further use)')
+    parser.add_argument('--n_classes', type=int, default=10, help='Number of classes (for further use)')
 
     return parser.parse_args()
 

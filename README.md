@@ -1,12 +1,11 @@
 # Adversiarial autoencoder TF2
 
 A Tensorflow 2.0 implementation of __[Adversarial Autoencoder](https://arxiv.org/abs/1511.05644/)__ (ICLR 2016)
-* Adversarial autoencoder - hidden code regularization<br/><br/>
 
 ## Model
 Architecture | Description
 ------------ | -------------
-<img src="imgs/aae-fig3.png" width="800px" style="max-width:100%"> | Regularization of the hidden code by incorporationg full label information.<br/> <sub>*Alireza Makhzani, Jonathon Shlens, Navdeep Jaitly, and Ian J. Goodfellow. 2015. Adversarial Autoencoders. CoRRabs/1511.05644 (2015). Figure 3 from the paper.*</sub>
+<img src="imgs/aae-fig3.png" width="800px" style="max-width:100%"> | Regularization of the hidden code by incorporationg full label information (Fig.3 from the paper).<br/> <sub>*Alireza Makhzani, Jonathon Shlens, Navdeep Jaitly, and Ian J. Goodfellow. 2015. Adversarial Autoencoders. CoRRabs/1511.05644 (2015). Figure 3 from the paper.*</sub>
 
 ## Results
 ### Latent space

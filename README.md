@@ -32,8 +32,8 @@ python train_model.py --prior_type gaussian_mixture
 * `--prior_type`: Type of target prior distribution. Default: `gaussian_mixture`. Required.
 * `--results_dir`: Training visualization directory. Default: `results`. Created if non-existent.
 * `--log_dir`: Log directory (Tensorboard). Default: `logs`. Created if non-existent.
-* `--gm_x_stddev`: Gaussian mixture prior: standard dev for the x coord. Default: `0.5`
-* `--gm_y_stddev`: Gaussian mixture prior: standard dev for the y coord. Default: `0.1`
+* `--gm_x_stddev`: Gaussian mixture prior: standard deviation for the x coord. Default: `0.5`
+* `--gm_y_stddev`: Gaussian mixture prior: standard deviation for the y coord. Default: `0.1`
 * `--n_epochs`: Number of epochs. Default: `20`
 * `--learning_rate`: Learning rate. Default: `0.001`
 * `--batch_size`: Batch size. Default: `128`

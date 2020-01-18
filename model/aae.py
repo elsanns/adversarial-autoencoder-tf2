@@ -1,8 +1,14 @@
+# coding=utf-8
+"""Classes representing modules of the Adversarial Autoencoder: Encoder, Decoder, Discriminator."""
+
+
 import tensorflow as tf
 from tensorflow.keras import layers, Model
 
 
 class Encoder(Model):
+     """Encoder of the Adversarial Autoencoder model"""
+        
     def __init__(self, **kwargs):
         super(Encoder, self).__init__()
         self.drop_out_rate = 0.1
@@ -39,6 +45,8 @@ class Encoder(Model):
 
 
 class Decoder(Model):
+    """Decoder of the Adversarial Autoencoder model"""
+        
     def __init__(self, image_dim):
         super(Decoder, self).__init__()
         self.drop_out_rate = 0.1
@@ -69,6 +77,8 @@ class Decoder(Model):
 
 
 class Discriminator(Model):
+     """Discriminator of the Adversarial Autoencoder model"""
+        
     def __init__(self):
         super(Discriminator, self).__init__()
         self.drop_out_rate = 0.1
@@ -110,6 +120,18 @@ class Discriminator(Model):
 
 
 class Gan(Model):
+"""
+    Model of the Adversarial Autoencoder.
+    
+    Args:
+        encoder (Encoder):
+            Encoder of the Adversarial Autoencoder (Gan) model.
+        decoder (Decoder):
+            Decoder of the Adversarial Autoencoder (Gan) model.
+        discriminator (Discriminator):    
+            Discriminator of the Adversarial Autoencoder (Gan) model.  
+"""    
+
     def __init__(self, image_dim):
         super(Gan, self).__init__()
         self.encoder = Encoder()

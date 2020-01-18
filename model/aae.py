@@ -120,8 +120,7 @@ class Discriminator(Model):
 
 
 class Gan(Model):
-"""
-    Model of the Adversarial Autoencoder.
+"""Model of the Adversarial Autoencoder.
     
     Args:
         encoder (Encoder):

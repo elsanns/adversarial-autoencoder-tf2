@@ -2,3 +2,4 @@
 **/logs/
 **/results/
 __pycache__/
+.idea

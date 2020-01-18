@@ -9,13 +9,13 @@ import os
 
 
 class PlotFactory():
-    def __init__(self, prior_factory, results_dir, prior_type, num_classes=10, x_sampling_reconstr=17,
+    def __init__(self, prior_factory, results_dir, prior_type, n_classes=10, x_sampling_reconstr=17,
                  y_sampling_reconstr=17):
 
         super(PlotFactory, self).__init__()
         self.results_dir = results_dir
         self.prior_type = prior_type
-        self.num_classes = num_classes
+        self.n_classes = n_classes
         self.x_sampling_reconstr = x_sampling_reconstr
         self.y_sampling_reconstr = y_sampling_reconstr
 
@@ -54,8 +54,8 @@ class PlotFactory():
     def plot_distribution(self, z, labels, name='z_distribution.png'):
         plt.figure(figsize=(8, 6))
         plt.scatter(z[:, 0], z[:, 1], c=np.argmax(labels, 1), marker='o', edgecolor='none',
-                    cmap=plt.cm.get_cmap('jet', self.num_classes))
-        plt.colorbar(ticks=range(self.num_classes))
+                    cmap=plt.cm.get_cmap('jet', self.n_classes))
+        plt.colorbar(ticks=range(self.n_classes))
         axes = plt.gca()
         x_min, y_min = tuple(np.min(z, axis=0))
         x_max, y_max = tuple(np.max(z, axis=0))
@@ -74,9 +74,9 @@ class PlotFactory():
         z_sample = np.rollaxis(np.mgrid[x_range:-x_range:self.x_sampling_reconstr * 1j, x_range:-x_range:self.y_sampling_reconstr * 1j], 0, 3)
         return z_sample.reshape([-1, 2])
 
-    def plot_distribution_demo(self, prior_type, batch_size, num_classes=10, name=None):
-        labels = np.random.randint(0, num_classes, size=[batch_size])
-        z = self.prior_factory.get_prior(prior_type)(batch_size, labels, num_classes)
+    def plot_distribution_demo(self, prior_type, batch_size, n_classes=10, name=None):
+        labels = np.random.randint(0, n_classes, size=[batch_size])
+        z = self.prior_factory.get_prior(prior_type)(batch_size, labels, n_classes)
         if name is None:
             name = prior_type + "_target_prior.png"
         labels_one_hot = np.eye(len(labels))[labels]

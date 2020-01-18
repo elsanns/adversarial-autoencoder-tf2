@@ -12,7 +12,7 @@ class DataLoader():
         self.img_shape = self.info.features['image'].shape
         self.img_size_x = self.img_shape[0]
         self.img_size_y = self.img_shape[1]
-        self.n_classes = self.info.features['label'].n_classes
+        self.n_classes = self.info.features['label'].num_classes
 
         self.train_ds = None
         self.test_ds = None

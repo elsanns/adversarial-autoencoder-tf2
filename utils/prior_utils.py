@@ -3,13 +3,13 @@ from math import sin, cos, sqrt
 
 
 class PriorFactory():
-    def __init__(self, num_classes, gm_x_stddev=0.5, gm_y_stddev=0.1):
+    def __init__(self, n_classes, gm_x_stddev=0.5, gm_y_stddev=0.1):
         super(PriorFactory, self).__init__()
-        self.num_classes = num_classes
+        self.n_classes = n_classes
         self.gaussian_mixture_x_stddev = gm_x_stddev
         self.gaussian_mixture_y_stddev = gm_y_stddev
 
-    def gaussian_mixture(self, batch_size, labels, num_classes):
+    def gaussian_mixture(self, batch_size, labels, n_classes):
         x_stddev = self.gaussian_mixture_x_stddev
         y_stddev = self.gaussian_mixture_y_stddev
         shift = 3 * x_stddev
@@ -19,7 +19,7 @@ class PriorFactory():
         z = np.array([[xx, yy] for xx, yy in zip(x, y)])
 
         def rotate(z, label):
-            angle = label * 2.0 * np.pi / num_classes
+            angle = label * 2.0 * np.pi / n_classes
             rotation_matrix = np.array([[cos(angle), -sin(angle)], [sin(angle), cos(angle)]])
             z[np.where(labels == label)] = np.array(
                 [rotation_matrix.dot(np.array(point)) for point in z[np.where(labels == label)]])
@@ -31,7 +31,7 @@ class PriorFactory():
         return z
 
     # Borrowed from https://github.com/nicklhy/AdversarialAutoEncoder/blob/master/data_factory.py#L40 (modified)
-    def swiss_roll(self, batch_size, labels, num_classes):
+    def swiss_roll(self, batch_size, labels, n_classes):
         def sample(label, n_labels):
             uni = np.random.uniform(0.0, 1.0) / float(n_labels) + float(label) / float(n_labels)
             r = sqrt(uni) * 3.0
@@ -43,7 +43,7 @@ class PriorFactory():
         dim_z = 2
         z = np.zeros((batch_size, dim_z), dtype=np.float32)
         for batch in range(batch_size):
-            z[batch, :] = sample(labels[batch], num_classes)
+            z[batch, :] = sample(labels[batch], n_classes)
         return z
 
     def get_prior(self, prior_type):

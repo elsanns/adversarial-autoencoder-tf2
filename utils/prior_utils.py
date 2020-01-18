@@ -1,8 +1,14 @@
+# coding=utf-8
+"""Generates samples from supported types of prior distributions."""
+
+
 import numpy as np
 from math import sin, cos, sqrt
 
 
 class PriorFactory():
+    """Class containing methods for generation of samples from supported prior distributions."""
+
     def __init__(self, n_classes, gm_x_stddev=0.5, gm_y_stddev=0.1):
         super(PriorFactory, self).__init__()
         self.n_classes = n_classes

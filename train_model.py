@@ -1,4 +1,6 @@
 # coding=utf-8
+"""Executes model training."""
+
 
 import argparse
 from model import trainer
@@ -8,7 +10,8 @@ def parse_args():
     desc = "Adversarial autoencoder TensorFlow 2"
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--prior_type', type=str, default='gaussian_mixture',
-                        choices=['gaussian_mixture', 'swiss_roll'], help='Type of target prior distribution', required=True)
+                        choices=['gaussian_mixture', 'swiss_roll'], help='Type of target prior distribution',
+                        required=True)
     parser.add_argument('--results_dir', type=str, default='results', help='Training visualization directory')
     parser.add_argument('--log_dir', type=str, default='logs', help='Log directory (Tensorboard)')
     parser.add_argument('--gm_x_stddev', type=float, default=0.5,

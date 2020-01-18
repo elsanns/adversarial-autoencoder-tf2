@@ -57,7 +57,9 @@ def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distr
 
 def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_classes, data_loader,
                     plot_factory, log_dir):
-    """"Training of all batches `n_epochs` of times"""
+    """"Training of all batches `n_epochs` times. Creates and saves plots visualizing training results and logs
+    Tensorboard metrics in the `log_dir` directory.
+    """
     
     log_dir = os.path.join(log_dir, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     summary_writer = tf.summary.create_file_writer(logdir=log_dir)
@@ -70,7 +72,8 @@ def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_clas
     for epoch in range(n_epochs):
         for batch_no, (x_batch, y_labels) in enumerate(train_ds):
             label_sample = np.random.randint(0, n_classes, size=[x_batch.shape[0]])
-            real_distribution = plot_factory.prior_factory.get_prior(prior_type)(x_batch.shape[0], label_sample, n_classes)
+            real_distribution = plot_factory.prior_factory.get_prior(prior_type)(x_batch.shape[0], label_sample,
+                                                                                 n_classes)
 
             gan_loss, discriminator_loss, encoder_loss = train_step(x_batch, y_labels, gan, optimizers_dict,
                                                                     label_sample, real_distribution, n_classes)
@@ -98,8 +101,8 @@ def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_clas
 
 
 def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epoch=None):
-    """Creates plots visualizing training results: reconstruction, latent code distribution 
-    and generator output for point sampled from the latent space. Plotting is handled by the plot_factory object."""
+    """Creates plots visualizing training results: image reconstruction, latent code distribution
+    and generator output for points sampled from the latent space. Plotting is handled by the plot_factory object."""
     
     n_tot_imgs = n_classes * n_classes
     n_tot_imgs_sampled = plot_factory.x_sampling_reconstr * plot_factory.y_sampling_reconstr
@@ -111,7 +114,7 @@ def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epo
     # Test data for reconstruction
     x_test, _ = data_loader.get_test_sample(n_tot_imgs, n_tot_imgs)
     x_test_img = x_test.reshape(n_tot_imgs, data_loader.img_size_x, data_loader.img_size_y)
-    plot_factory.save_images(x_test_img, name="x_input.png")
+    plot_factory.plot_image_array_reconstr(x_test_img, name="x_input.png")
 
     # Test data for distribution plot
     x_dist, id_dist = data_loader.get_test_sample(dist_sample_count, dist_sample_count)
@@ -123,14 +126,14 @@ def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epo
     y_reconstruction = gan.decoder(gan.encoder(x_test, training=False), training=False)
     y_reconstruction_img = tf.reshape(y_reconstruction,
                                       (n_tot_imgs, data_loader.img_size_x, data_loader.img_size_y)).numpy()
-    plot_factory.save_images(y_reconstruction_img, name="/x_reconstruction_epoch_{}.png".format(epoch))
+    plot_factory.plot_image_array_reconstr(y_reconstruction_img, name="/x_reconstruction_{}.png".format(epoch))
 
+    # Plot decoder output for z samples
     if prior_type == 'gaussian_mixture':
-        # Plot decoder output for z samples
         y_for_z_samples = gan.decoder(z_samples, training=False)
         y_for_z_samples_img = tf.reshape(y_for_z_samples,
                                          (n_tot_imgs_sampled, data_loader.img_size_x, data_loader.img_size_y)).numpy()
-        plot_factory.save_images_sampled(y_for_z_samples_img, name="z_sampled_reconstr_{}.png".format(epoch))
+        plot_factory.plot_image_array_sampled(y_for_z_samples_img, name="z_sampled_reconstruction_{}.png".format(epoch))
 
     # z distribution by label
     z_dist = gan.encoder(x_dist, training=False)

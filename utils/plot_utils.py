@@ -1,3 +1,7 @@
+# coding=utf-8
+"""Plotting training results and saving images in subfolders of the `args.results_dir` directory."""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import imageio
@@ -38,20 +42,24 @@ class PlotFactory():
 
         return img_arr
 
-    def save_images(self, images, name='reconstruction.jpg'):
-        images = images.reshape(10*10, 28, 28)
+    def plot_image_array(self, images, x_dim, y_dim, name):
+        """Plots and saves an array of images."""
+
+        images = images.reshape(x_dim*y_dim, 28, 28)
         img_write = PlotFactory.merge_images(images)
         img_write = img_write * 255
         img_write = img_write.astype(np.uint8)
         imageio.imwrite(self.results_dir_current + "/"+name, img_write)
 
-    def save_images_sampled(self, images, name='result.jpg'):
-        images = images.reshape(self.x_sampling_reconstr*self.y_sampling_reconstr, 28, 28)
-        img_write = PlotFactory.merge_images(images)
-        img_write = (img_write * 255).astype(np.uint8)
-        imageio.imwrite(self.results_dir_current + "/"+name, img_write)
+    def plot_image_array_reconstr(self, images, name):
+        self.plot_image_array(images, self.n_classes, self.n_classes, name)
+
+    def plot_image_array_sampled(self, images, name='results.png'):
+        self.plot_image_array(images, self.x_sampling_reconstr, self.y_sampling_reconstr, name)
 
     def plot_distribution(self, z, labels, name='z_distribution.png'):
+        """Plots and saves latent space distribution."""
+
         plt.figure(figsize=(8, 6))
         plt.scatter(z[:, 0], z[:, 1], c=np.argmax(labels, 1), marker='o', edgecolor='none',
                     cmap=plt.cm.get_cmap('jet', self.n_classes))
@@ -67,14 +75,19 @@ class PlotFactory():
         plt.savefig(self.results_dir_current + "/" + name)
         plt.close()
 
+    # borrowed from https://github.com/fastforwardlabs/vae-tf/blob/master/plot.py
     def plot_sampling_reconstr(self):
-        # borrowed from https://github.com/fastforwardlabs/vae-tf/blob/master/plot.py
+        """Samples from the latent space using label info and lays out sampled images by class."""
+
         # z_sample = np.rollaxis(np.mgrid[3.0:-3.0:15 * 1j, 3.0:-3.0:15 * 1j], 0, 3) #oryginal version
         x_range = self.prior_factory.gaussian_mixture_x_stddev * 3.0 * 2
-        z_sample = np.rollaxis(np.mgrid[x_range:-x_range:self.x_sampling_reconstr * 1j, x_range:-x_range:self.y_sampling_reconstr * 1j], 0, 3)
+        z_sample = np.rollaxis(np.mgrid[x_range:-x_range:self.x_sampling_reconstr * 1j,
+                               x_range:-x_range:self.y_sampling_reconstr * 1j], 0, 3)
         return z_sample.reshape([-1, 2])
 
     def plot_distribution_demo(self, prior_type, batch_size, n_classes=10, name=None):
+        """Plots and saves an image of the target prior distribution."""
+
         labels = np.random.randint(0, n_classes, size=[batch_size])
         z = self.prior_factory.get_prior(prior_type)(batch_size, labels, n_classes)
         if name is None:

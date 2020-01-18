@@ -1,3 +1,7 @@
+# coding=utf-8
+"""Loading data from tensorflow_datasets, creating train and test datasets."""
+
+
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
@@ -18,6 +22,13 @@ class DataLoader():
         self.test_ds = None
 
     def make_dataset(self):
+        """Constructs training and test datasets.
+
+        Returns:
+            Tuple (tf.data.Dataset, tf.data.Dataset): Tuple containing training (first) and test (second) datasets.
+
+        """
+
         train_ds, test_ds = self.mnist_data['train'], self.mnist_data['test']
         train_ds = train_ds.map(lambda ds: {'image': tf.cast(ds['image'], tf.float32) / 255.,
                                             'label': ds['label']})
@@ -36,6 +47,6 @@ class DataLoader():
         return self.train_ds, self.test_ds
 
     def get_test_sample(self, num_samples, batch_size):
-        """Returns a sample from test_ds as a tuple"""
+        """Returns a sample from the test dataset as a tuple"""
         ret_ds = self.test_ds.take(num_samples).batch(batch_size)
         return tuple(tfds.as_numpy(ret_ds))[0]

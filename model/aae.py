@@ -7,7 +7,7 @@ from tensorflow.keras import layers, Model
 
 
 class Encoder(Model):
-     """Encoder of the Adversarial Autoencoder model"""
+    """Encoder of the Adversarial Autoencoder model"""
         
     def __init__(self, **kwargs):
         super(Encoder, self).__init__()
@@ -77,7 +77,7 @@ class Decoder(Model):
 
 
 class Discriminator(Model):
-     """Discriminator of the Adversarial Autoencoder model"""
+    """Discriminator of the Adversarial Autoencoder model"""
         
     def __init__(self):
         super(Discriminator, self).__init__()
@@ -120,16 +120,16 @@ class Discriminator(Model):
 
 
 class Gan(Model):
-"""Model of the Adversarial Autoencoder.
+    """Model of the Adversarial Autoencoder.
     
-    Args:
-        encoder (Encoder):
-            Encoder of the Adversarial Autoencoder (Gan) model.
-        decoder (Decoder):
-            Decoder of the Adversarial Autoencoder (Gan) model.
-        discriminator (Discriminator):    
-            Discriminator of the Adversarial Autoencoder (Gan) model.  
-"""    
+        Args:
+            encoder (Encoder):
+                Encoder of the Adversarial Autoencoder (Gan) model.
+            decoder (Decoder):
+                Decoder of the Adversarial Autoencoder (Gan) model.
+            discriminator (Discriminator):
+                Discriminator of the Adversarial Autoencoder (Gan) model.
+    """
 
     def __init__(self, image_dim):
         super(Gan, self).__init__()

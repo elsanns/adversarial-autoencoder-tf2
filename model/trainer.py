@@ -9,7 +9,7 @@ import datetime
 
 
 @tf.function
-def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distribution, num_classes):
+def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distribution, n_classes):
     # Gan
     with tf.GradientTape() as gan_tape:
         x_reconstruction = gan.decoder(gan.encoder(x_batch))
@@ -21,7 +21,7 @@ def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distr
 
     # Discriminator
     with tf.GradientTape() as discriminator_tape:
-        label_sample_one_hot = tf.one_hot(label_sample, num_classes)
+        label_sample_one_hot = tf.one_hot(label_sample, n_classes)
         real_distribution_label = tf.concat([real_distribution, label_sample_one_hot], axis=1)
 
         fake_distribution = gan.encoder(x_batch)
@@ -48,7 +48,7 @@ def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distr
     return gan_loss, discriminator_loss, encoder_loss
 
 
-def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, num_classes, data_loader,
+def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_classes, data_loader,
                     plot_factory, log_dir):
     log_dir = os.path.join(log_dir, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     summary_writer = tf.summary.create_file_writer(logdir=log_dir)
@@ -60,11 +60,11 @@ def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, num_cl
 
     for epoch in range(n_epochs):
         for batch_no, (x_batch, y_labels) in enumerate(train_ds):
-            label_sample = np.random.randint(0, num_classes, size=[x_batch.shape[0]])
-            real_distribution = plot_factory.prior_factory.get_prior(prior_type)(x_batch.shape[0], label_sample, num_classes)
+            label_sample = np.random.randint(0, n_classes, size=[x_batch.shape[0]])
+            real_distribution = plot_factory.prior_factory.get_prior(prior_type)(x_batch.shape[0], label_sample, n_classes)
 
             gan_loss, discriminator_loss, encoder_loss = train_step(x_batch, y_labels, gan, optimizers_dict,
-                                                                    label_sample, real_distribution, num_classes)
+                                                                    label_sample, real_distribution, n_classes)
 
             gan_loss_vec(gan_loss)
             discriminator_loss_vec(discriminator_loss)
@@ -85,11 +85,11 @@ def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, num_cl
                      discriminator_loss_vec.result(),
                      encoder_loss_vec.result()))
 
-        visualize_results(gan, data_loader, plot_factory, num_classes, prior_type, epoch)
+        visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epoch)
 
 
-def visualize_results(gan, data_loader, plot_factory, num_classes, prior_type, epoch=None):
-    n_tot_imgs = num_classes * num_classes
+def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epoch=None):
+    n_tot_imgs = n_classes * n_classes
     n_tot_imgs_sampled = plot_factory.x_sampling_reconstr * plot_factory.y_sampling_reconstr
     dist_sample_count = 10000
 
@@ -132,7 +132,7 @@ def train_model(args):
     batch_size = args.batch_size
     learning_rate = args.learning_rate
     prior_type = args.prior_type
-    num_classes = args.num_classes
+    n_classes = args.n_classes
     gm_x_stddev = args.gm_x_stddev
     gm_y_stddev = args.gm_y_stddev
 
@@ -141,8 +141,8 @@ def train_model(args):
     train_ds, test_ds = data_loader.make_dataset()
 
     # Prior and Plot objects
-    prior_factory = PriorFactory(num_classes, gm_x_stddev=gm_x_stddev, gm_y_stddev=gm_y_stddev)
-    plot_factory = PlotFactory(prior_factory, result_dir, prior_type, num_classes)
+    prior_factory = PriorFactory(n_classes, gm_x_stddev=gm_x_stddev, gm_y_stddev=gm_y_stddev)
+    plot_factory = PlotFactory(prior_factory, result_dir, prior_type, n_classes)
 
     # Model
     gan = Gan(image_dim=data_loader.img_size_x*data_loader.img_size_y)
@@ -153,5 +153,5 @@ def train_model(args):
                        'gan': tf.optimizers.Adam(learning_rate=learning_rate)}
 
     # Training
-    train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, num_classes, data_loader,
+    train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_classes, data_loader,
                     plot_factory, log_dir)

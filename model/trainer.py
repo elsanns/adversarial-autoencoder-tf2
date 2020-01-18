@@ -1,3 +1,8 @@
+# coding=utf-8
+""""Functions used for model training. Training at the batch level performed in a static graph: 
+function: train_step decorated with `@tf.function` decorator."""
+
+
 import numpy as np
 import tensorflow as tf
 from model.aae import Gan, Encoder, Discriminator
@@ -10,6 +15,8 @@ import datetime
 
 @tf.function
 def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distribution, n_classes):
+    """"Training of one batch execute in graph mode."""
+    
     # Gan
     with tf.GradientTape() as gan_tape:
         x_reconstruction = gan.decoder(gan.encoder(x_batch))
@@ -50,6 +57,8 @@ def train_step(x_batch, y_labels, gan, optimizers_dict, label_sample, real_distr
 
 def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_classes, data_loader,
                     plot_factory, log_dir):
+    """"Training of all batches `n_epochs` of times"""
+    
     log_dir = os.path.join(log_dir, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     summary_writer = tf.summary.create_file_writer(logdir=log_dir)
 
@@ -89,6 +98,9 @@ def train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type, n_clas
 
 
 def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type, epoch=None):
+    """Creates plots visualizing training results: reconstruction, latent code distribution 
+    and generator output for point sampled from the latent space. Plotting is handled by the plot_factory object."""
+    
     n_tot_imgs = n_classes * n_classes
     n_tot_imgs_sampled = plot_factory.x_sampling_reconstr * plot_factory.y_sampling_reconstr
     dist_sample_count = 10000

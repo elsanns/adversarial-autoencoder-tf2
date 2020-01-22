@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Executes model training."""
+"""Trains model on the MNIST dataset downloaded from TensorFlow Datasets."""
 
 
 import argparse

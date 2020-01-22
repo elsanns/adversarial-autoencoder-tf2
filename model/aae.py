@@ -26,7 +26,7 @@ class Encoder(Model):
 
         self.z = layers.Dense(self.dim_z, kernel_initializer=kernel_initializer)
 
-    def __call__(self, inputs, training=True):
+    def call(self, inputs, training=True):
         x = self.dense0(inputs)
         x = self.lr0(x)
         x = self.drop0(x)
@@ -64,7 +64,7 @@ class Decoder(Model):
 
         self.reconstruction = layers.Dense(self.image_dim, activation='sigmoid', kernel_initializer=kernel_initializer)
 
-    def __call__(self, inputs, training=True):
+    def call(self, inputs, training=True):
         x = self.dense0(inputs)
         x = self.lr0(x)
         x = self.drop0(x)
@@ -96,7 +96,7 @@ class Discriminator(Model):
         self.prediction_logits = layers.Dense(1, kernel_initializer=kernel_initializer)
         self.prediction = tf.math.sigmoid
 
-    def __call__(self, inputs, training=True):
+    def call(self, inputs, training=True):
         x = self.dense0(inputs)
         x = self.lr0(x)
         x = self.drop0(x)

@@ -25,15 +25,17 @@ class DataLoader():
         """Constructs training and test datasets.
 
         Returns:
-            Tuple (tf.data.Dataset, tf.data.Dataset): Tuple containing training (first) and test (second) datasets.
+            Tuple (tf.data.Dataset, tf.data.Dataset):
+                Tuple containing training (first) and test (second) datasets.
 
         """
 
         train_ds, test_ds = self.mnist_data['train'], self.mnist_data['test']
         train_ds = train_ds.map(lambda ds: {'image': tf.cast(ds['image'], tf.float32) / 255.,
                                             'label': ds['label']})
-        train_ds = train_ds.map(lambda ds: (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
-                                            tf.one_hot(ds['label'], self.n_classes)))
+        train_ds = train_ds.map(lambda ds:
+                                (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
+                                 tf.one_hot(ds['label'], self.n_classes)))
         train_ds.shuffle(50000)
         train_ds = train_ds.batch(self.batch_size)
 
@@ -41,8 +43,9 @@ class DataLoader():
 
         test_ds = test_ds.map(lambda ds: {'image': tf.cast(ds['image'], tf.float32) / 255.,
                                           'label': ds['label']})
-        test_ds = test_ds.map(lambda ds: (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
-                                          tf.one_hot(ds['label'], self.n_classes)))
+        test_ds = test_ds.map(lambda ds:
+                              (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
+                               tf.one_hot(ds['label'], self.n_classes)))
         self.train_ds, self.test_ds = train_ds, test_ds
         return self.train_ds, self.test_ds
 

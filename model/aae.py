@@ -1,6 +1,7 @@
 # coding=utf-8
-"""Classes representing modules of the Adversarial Autoencoder: Encoder, Decoder, Discriminator."""
-
+"""Classes representing modules of the Adversarial Autoencoder:
+Encoder, Decoder, Discriminator.
+"""
 
 import tensorflow as tf
 from tensorflow.keras import layers, Model
@@ -8,7 +9,7 @@ from tensorflow.keras import layers, Model
 
 class Encoder(Model):
     """Encoder of the Adversarial Autoencoder model"""
-        
+
     def __init__(self, **kwargs):
         super(Encoder, self).__init__()
         self.drop_out_rate = 0.1
@@ -16,15 +17,18 @@ class Encoder(Model):
         self.dim_z = 2
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.z = layers.Dense(self.dim_z, kernel_initializer=kernel_initializer)
+        self.z = layers.Dense(self.dim_z,
+                              kernel_initializer=kernel_initializer)
 
     def call(self, inputs, training=True):
         x = self.dense0(inputs)
@@ -46,7 +50,7 @@ class Encoder(Model):
 
 class Decoder(Model):
     """Decoder of the Adversarial Autoencoder model"""
-        
+
     def __init__(self, image_dim):
         super(Decoder, self).__init__()
         self.drop_out_rate = 0.1
@@ -54,15 +58,19 @@ class Decoder(Model):
         self.image_dim = image_dim
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.reconstruction = layers.Dense(self.image_dim, activation='sigmoid', kernel_initializer=kernel_initializer)
+        self.reconstruction = layers.Dense(self.image_dim,
+                                           activation='sigmoid',
+                                           kernel_initializer=kernel_initializer)
 
     def call(self, inputs, training=True):
         x = self.dense0(inputs)
@@ -78,22 +86,25 @@ class Decoder(Model):
 
 class Discriminator(Model):
     """Discriminator of the Adversarial Autoencoder model"""
-        
+
     def __init__(self):
         super(Discriminator, self).__init__()
         self.drop_out_rate = 0.1
         self.n_hidden = 1000
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden,
+                                   kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.prediction_logits = layers.Dense(1, kernel_initializer=kernel_initializer)
+        self.prediction_logits = layers.Dense(1,
+                                              kernel_initializer=kernel_initializer)
         self.prediction = tf.math.sigmoid
 
     def call(self, inputs, training=True):
@@ -139,5 +150,6 @@ class Gan(Model):
 
     @staticmethod
     def get_loss(x_input, x_reconstruction):
-        gan_loss = tf.reduce_mean(tf.math.squared_difference(x_input, x_reconstruction))
+        gan_loss = tf.reduce_mean(
+            tf.math.squared_difference(x_input, x_reconstruction))
         return gan_loss

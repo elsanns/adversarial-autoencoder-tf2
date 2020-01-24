@@ -1,13 +1,14 @@
 # coding=utf-8
 """Generates samples from supported types of prior distributions."""
 
-
 import numpy as np
 from math import sin, cos, sqrt
 
 
 class PriorFactory():
-    """Class containing methods for generation of samples from supported prior distributions."""
+    """Class containing methods for generation of samples
+    from supported prior distributions.
+    """
 
     def __init__(self, n_classes, gm_x_stddev=0.5, gm_y_stddev=0.1):
         super(PriorFactory, self).__init__()
@@ -26,9 +27,11 @@ class PriorFactory():
 
         def rotate(z, label):
             angle = label * 2.0 * np.pi / n_classes
-            rotation_matrix = np.array([[cos(angle), -sin(angle)], [sin(angle), cos(angle)]])
+            rotation_matrix = np.array(
+                [[cos(angle), -sin(angle)], [sin(angle), cos(angle)]])
             z[np.where(labels == label)] = np.array(
-                [rotation_matrix.dot(np.array(point)) for point in z[np.where(labels == label)]])
+                [rotation_matrix.dot(np.array(point)) for point in
+                 z[np.where(labels == label)]])
             return z
 
         for label in set(labels):
@@ -39,7 +42,8 @@ class PriorFactory():
     # Borrowed from https://github.com/nicklhy/AdversarialAutoEncoder/blob/master/data_factory.py#L40 (modified)
     def swiss_roll(self, batch_size, labels, n_classes):
         def sample(label, n_labels):
-            uni = np.random.uniform(0.0, 1.0) / float(n_labels) + float(label) / float(n_labels)
+            uni = np.random.uniform(0.0, 1.0) / float(n_labels) + float(
+                label) / float(n_labels)
             r = sqrt(uni) * 3.0
             rad = np.pi * 4.0 * sqrt(uni)
             x = r * cos(rad)
@@ -59,4 +63,5 @@ class PriorFactory():
             return self.swiss_roll
         else:
             raise ValueError(
-                "You passed in prior_type={}, supported types are: gaussian_mixture, swiss_roll".format(prior_type))
+                "You passed in prior_type={}, supported types are: "
+                "gaussian_mixture, swiss_roll".format(prior_type))

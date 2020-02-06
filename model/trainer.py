@@ -180,36 +180,26 @@ def visualize_results(gan, data_loader, plot_factory, n_classes, prior_type,
 
 
 def train_model(args):
-    result_dir = args.results_dir
-    log_dir = args.log_dir
-    n_epochs = args.n_epochs
-    batch_size = args.batch_size
-    learning_rate = args.learning_rate
-    prior_type = args.prior_type
-    n_classes = args.n_classes
-    gm_x_stddev = args.gm_x_stddev
-    gm_y_stddev = args.gm_y_stddev
-
     # Data
-    data_loader = DataLoader(batch_size)
+    data_loader = DataLoader(args.batch_size)
     train_ds, test_ds = data_loader.make_dataset()
 
     # Prior and Plot objects
-    prior_factory = PriorFactory(n_classes, gm_x_stddev=gm_x_stddev,
-                                 gm_y_stddev=gm_y_stddev)
-    plot_factory = PlotFactory(prior_factory, result_dir, prior_type,
-                               n_classes)
+    prior_factory = PriorFactory(args.n_classes, gm_x_stddev=args.gm_x_stddev,
+                                 gm_y_stddev=args.gm_y_stddev)
+    plot_factory = PlotFactory(prior_factory, args.results_dir, args.prior_type,
+                               args.n_classes, data_loader.img_size_x,
+                               data_loader.img_size_y)
 
     # Model
     gan = Gan(image_dim=data_loader.img_size_x * data_loader.img_size_y)
 
     # Optimizers
     optimizers_dict = {
-        'encoder': tf.optimizers.Adam(learning_rate=learning_rate),
-        'discriminator': tf.optimizers.Adam(learning_rate=learning_rate / 5),
-        'gan': tf.optimizers.Adam(learning_rate=learning_rate)}
+        'encoder': tf.optimizers.Adam(learning_rate=args.learning_rate),
+        'discriminator': tf.optimizers.Adam(learning_rate=args.learning_rate / 5),
+        'gan': tf.optimizers.Adam(learning_rate=args.learning_rate)}
 
     # Training
-    train_all_steps(gan, optimizers_dict, train_ds, n_epochs, prior_type,
-                    n_classes, data_loader,
-                    plot_factory, log_dir)
+    train_all_steps(gan, optimizers_dict, train_ds, args.n_epochs, args.prior_type,
+                    args.n_classes, data_loader, plot_factory, args.log_dir)

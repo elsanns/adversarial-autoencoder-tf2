@@ -14,13 +14,15 @@ import os
 
 
 class PlotFactory():
-    def __init__(self, prior_factory, results_dir, prior_type, n_classes=10,
-                 x_sampling_reconstr=17,
+    def __init__(self, prior_factory, results_dir, prior_type, n_classes,
+                 img_size_x, img_size_y, x_sampling_reconstr=17,
                  y_sampling_reconstr=17):
         super(PlotFactory, self).__init__()
         self.results_dir = results_dir
         self.prior_type = prior_type
         self.n_classes = n_classes
+        self.img_size_x = img_size_x
+        self.img_size_y = img_size_y
         self.x_sampling_reconstr = x_sampling_reconstr
         self.y_sampling_reconstr = y_sampling_reconstr
 
@@ -49,7 +51,7 @@ class PlotFactory():
     def plot_image_array(self, images, x_dim, y_dim, name):
         """Plots and saves an array of images."""
 
-        images = images.reshape(x_dim * y_dim, 28, 28)
+        images = images.reshape(x_dim * y_dim, self.img_size_x, self.img_size_y)
         img_write = PlotFactory.merge_images(images)
         img_write = img_write * 255
         img_write = img_write.astype(np.uint8)

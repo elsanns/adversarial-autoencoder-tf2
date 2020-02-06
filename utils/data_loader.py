@@ -27,16 +27,18 @@ class DataLoader():
         Returns:
             Tuple (tf.data.Dataset, tf.data.Dataset):
                 Tuple containing training (first) and test (second) datasets.
-
         """
 
         train_ds, test_ds = self.mnist_data['train'], self.mnist_data['test']
-        train_ds = train_ds.map(lambda ds: {'image': tf.cast(ds['image'], tf.float32) / 255.,
-                                            'label': ds['label']})
         train_ds = train_ds.map(lambda ds:
-                                (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
+                                {'image': tf.cast(ds['image'], tf.float32) / 255.,
+                                 'label': ds['label']})
+        train_ds = train_ds.map(lambda ds:
+                                (tf.reshape(ds['image'],
+                                            (self.img_size_x * self.img_size_y,)),
                                  tf.one_hot(ds['label'], self.n_classes)))
         train_ds.shuffle(50000)
+
         train_ds = train_ds.batch(self.batch_size)
 
         assert isinstance(train_ds, tf.data.Dataset)
@@ -46,10 +48,12 @@ class DataLoader():
         test_ds = test_ds.map(lambda ds:
                               (tf.reshape(ds['image'], (self.img_size_x * self.img_size_y,)),
                                tf.one_hot(ds['label'], self.n_classes)))
+
         self.train_ds, self.test_ds = train_ds, test_ds
         return self.train_ds, self.test_ds
 
     def get_test_sample(self, num_samples, batch_size):
         """Returns a sample from the test dataset as a tuple"""
+
         ret_ds = self.test_ds.take(num_samples).batch(batch_size)
         return tuple(tfds.as_numpy(ret_ds))[0]

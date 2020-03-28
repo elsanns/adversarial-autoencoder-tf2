@@ -88,7 +88,6 @@ class PlotFactory():
         """Samples from the latent space using label info
         and lays out sampled images by class.
         """
-
         # z_sample = np.rollaxis(np.mgrid[3.0:-3.0:15 * 1j, 3.0:-3.0:15 * 1j], 0, 3) #oryginal version
         x_range = self.prior_factory.gaussian_mixture_x_stddev * 3.0 * 2
         z_sample = np.rollaxis(

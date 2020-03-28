@@ -44,3 +44,6 @@ python train_model.py --prior_type gaussian_mixture
 * `--learning_rate`: Learning rate. Default: `0.001`
 * `--batch_size`: Batch size. Default: `128`
 * `--num_classes`: Number of classes (for further use). Default: `10`
+
+## Visualization of outliers
+<img src="imgs/outliers-all.png" width="100%" style="max-width:100%"> 

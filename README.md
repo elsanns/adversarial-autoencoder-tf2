@@ -46,4 +46,5 @@ python train_model.py --prior_type gaussian_mixture
 * `--num_classes`: Number of classes (for further use). Default: `10`
 
 ## Visualization of outliers
-<img src="imgs/outliers-all.png" width="100%" style="max-width:100%"> 
+Visualization of outliers from learnt distribution in the latent space
+<img src="imgs/outliers-all.png" width="1200px" style="max-width:100%"> 

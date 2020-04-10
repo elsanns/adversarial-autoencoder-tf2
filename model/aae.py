@@ -17,18 +17,15 @@ class Encoder(Model):
         self.dim_z = 2
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.z = layers.Dense(self.dim_z,
-                              kernel_initializer=kernel_initializer)
+        self.z = layers.Dense(self.dim_z, kernel_initializer=kernel_initializer)
 
     def call(self, inputs, training=True):
         x = self.dense0(inputs)
@@ -43,9 +40,11 @@ class Encoder(Model):
 
     @staticmethod
     def get_loss(disc_fake_logits):
-        return tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-            labels=tf.ones_like(disc_fake_logits),
-            logits=disc_fake_logits))
+        return tf.reduce_mean(
+            tf.nn.sigmoid_cross_entropy_with_logits(
+                labels=tf.ones_like(disc_fake_logits), logits=disc_fake_logits
+            )
+        )
 
 
 class Decoder(Model):
@@ -58,19 +57,17 @@ class Decoder(Model):
         self.image_dim = image_dim
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.reconstruction = layers.Dense(self.image_dim,
-                                           activation='sigmoid',
-                                           kernel_initializer=kernel_initializer)
+        self.reconstruction = layers.Dense(
+            self.image_dim, activation="sigmoid", kernel_initializer=kernel_initializer
+        )
 
     def call(self, inputs, training=True):
         x = self.dense0(inputs)
@@ -93,18 +90,15 @@ class Discriminator(Model):
         self.n_hidden = 1000
         kernel_initializer = tf.initializers.RandomNormal()
 
-        self.dense0 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense0 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr0 = layers.ReLU()
         self.drop0 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.dense1 = layers.Dense(self.n_hidden,
-                                   kernel_initializer=kernel_initializer)
+        self.dense1 = layers.Dense(self.n_hidden, kernel_initializer=kernel_initializer)
         self.lr1 = layers.ReLU()
         self.drop1 = layers.Dropout(rate=self.drop_out_rate)
 
-        self.prediction_logits = layers.Dense(1,
-                                              kernel_initializer=kernel_initializer)
+        self.prediction_logits = layers.Dense(1, kernel_initializer=kernel_initializer)
         self.prediction = tf.math.sigmoid
 
     def call(self, inputs, training=True):
@@ -122,9 +116,11 @@ class Discriminator(Model):
     @staticmethod
     def get_loss(real_logits, fake_logits):
         loss_real = tf.nn.sigmoid_cross_entropy_with_logits(
-            labels=tf.ones_like(real_logits), logits=real_logits)
+            labels=tf.ones_like(real_logits), logits=real_logits
+        )
         loss_fake = tf.nn.sigmoid_cross_entropy_with_logits(
-            labels=tf.zeros_like(fake_logits), logits=fake_logits)
+            labels=tf.zeros_like(fake_logits), logits=fake_logits
+        )
 
         loss = tf.reduce_mean(loss_real + loss_fake)
         return loss
@@ -150,6 +146,5 @@ class Gan(Model):
 
     @staticmethod
     def get_loss(x_input, x_reconstruction):
-        gan_loss = tf.reduce_mean(
-            tf.math.squared_difference(x_input, x_reconstruction))
+        gan_loss = tf.reduce_mean(tf.math.squared_difference(x_input, x_reconstruction))
         return gan_loss

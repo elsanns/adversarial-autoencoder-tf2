@@ -23,7 +23,8 @@ def parse_args():
         help="Training visualization directory",
     )
     parser.add_argument(
-        "--log_dir", type=str, default="logs", help="Log directory (Tensorboard)"
+        "--log_dir", type=str, default="logs",
+        help="Log directory (Tensorboard)"
     )
     parser.add_argument(
         "--gm_x_stddev",
@@ -37,13 +38,16 @@ def parse_args():
         default=0.1,
         help="Gaussian mixture prior shape: standard deviation for the y coord",
     )
-    parser.add_argument("--n_epochs", type=int, default=20, help="Number of epochs")
+    parser.add_argument("--n_epochs", type=int, default=20,
+                        help="Number of epochs")
     parser.add_argument(
         "--learning_rate", type=float, default=0.001, help="Learning rate"
     )
-    parser.add_argument("--batch_size", type=int, default=128, help="Batch size")
+    parser.add_argument("--batch_size", type=int, default=128,
+                        help="Batch size")
     parser.add_argument(
-        "--n_classes", type=int, default=10, help="Number of classes (for further use)"
+        "--n_classes", type=int, default=10,
+        help="Number of classes (for further use)"
     )
 
     return parser.parse_args()

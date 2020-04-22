@@ -11,6 +11,6 @@ In GAN architecture, encoder learns to map input to the latent space. This noteb
 
 ### Detecting outliers in the latent space with PCA
 
-<img src="../imgs/notebooks-outliers-1.png" width="200px" style="max-width:100%"> |<img src="../imgs/notebooks-outliers-2.png" width="200px" style="max-width:100%">| <img src="../imgs/notebooks-outliers-3.png" width="200px" style="max-width:100%"> |  <img src="../imgs/notebooks-outliers-4.png" width="200px" style="max-width:100%"> 
+<img src="imgs/notebooks-outliers-1.png" width="200px" style="max-width:100%"> |<img src="imgs/notebooks-outliers-2.png" width="200px" style="max-width:100%">| <img src="imgs/notebooks-outliers-3.png" width="200px" style="max-width:100%"> |  <img src="imgs/notebooks-outliers-4.png" width="200px" style="max-width:100%"> 
 |:---:|:---:|:---:|:---:|
 

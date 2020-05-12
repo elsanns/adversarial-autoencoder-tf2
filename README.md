@@ -6,7 +6,7 @@ A Tensorflow 2.0 implementation of __[Adversarial Autoencoder](https://arxiv.org
 ## Model
 Architecture | Description
 ------------ | -------------
-<img src="imgs/aae-fig3.png" width="800px" style="max-width:100%"> | Regularization of the hidden code by incorporationg full label information (Fig.3 from the paper).<br/> <sub>*Alireza Makhzani, Jonathon Shlens, Navdeep Jaitly, and Ian J. Goodfellow. 2015. Adversarial Autoencoders. CoRRabs/1511.05644 (2015). Figure 3 from the paper.*</sub>
+<img src="imgs/aae-fig3.png" width="600px" style="max-width:100%"> | Regularization of the hidden code by incorporationg full label information (Fig.3 from the paper).<br/> <sub>*Alireza Makhzani, Jonathon Shlens, Navdeep Jaitly, and Ian J. Goodfellow. 2015. Adversarial Autoencoders. CoRRabs/1511.05644 (2015). Figure 3 from the paper.*</sub>
 
 <br>
 
